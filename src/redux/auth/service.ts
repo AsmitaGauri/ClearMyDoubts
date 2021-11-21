@@ -1,14 +1,16 @@
 /* eslint-disable no-console */
 /* eslint-disable arrow-body-style */
 import { Dispatch } from 'redux';
-import Firebase from '../../../config/Firebase';
+import { Auth as auth } from '../../../config/Firebase';
 import {
   registrationRequested,
   registrationSuccessful,
   registrationFailed,
+  logoutUser,
+  loginRequested,
+  loginSuccessful,
+  loginFailed,
 } from './action';
-
-const auth = Firebase.auth();
 
 const registerWithEmailAndPassword = (userEmail: string, password: string) => {
   return (dispatch: Dispatch) => {
@@ -47,10 +49,30 @@ const registerWithEmailAndPassword = (userEmail: string, password: string) => {
   };
 };
 
-const signInWithEmailAndPassword = (email: string, password: string) => {
-  auth.signInWithEmailAndPassword(email, password)
-    .then((userDetails) => console.log(userDetails))
-    .catch((err) => console.log(err));
+const signInWithEmailAndPassword = (userEmail: string, password: string) => {
+  return (dispatch: Dispatch) => {
+    dispatch(loginRequested());
+    auth.signInWithEmailAndPassword(userEmail, password)
+      .then(async (userCredentials: any) => {
+        const { user } = userCredentials;
+        const {
+          uid, displayName, email, emailVerified, phoneNumber, photoURL,
+        } = user;
+        const idToken = await user.getIdToken();
+        dispatch(loginSuccessful({
+          uid, displayName, email, emailVerified, phoneNumber, photoURL, idToken,
+        }));
+      })
+      .catch((err: any) => {
+        const { code, message } = err;
+        dispatch(loginFailed({ code, message }));
+      });
+  };
 };
 
-export { registerWithEmailAndPassword, signInWithEmailAndPassword };
+const logout = () => {
+  return (dispatch: Dispatch) => {
+    dispatch(logoutUser());
+  };
+};
+export { registerWithEmailAndPassword, signInWithEmailAndPassword, logout };

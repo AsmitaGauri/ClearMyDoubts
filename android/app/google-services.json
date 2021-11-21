@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1035727886720",
+    "project_id": "clear-my-doubts-9ca27",
+    "storage_bucket": "clear-my-doubts-9ca27.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1035727886720:android:cdc7b4b5f54ebdd33a4965",
+        "android_client_info": {
+          "package_name": "com.forexsignals"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1035727886720-a09plserhnu6i6ivq4li4crvn3dd9ssq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0SpZatHGfS18ocT3PisW-7d-7h-M6qiw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1035727886720-a09plserhnu6i6ivq4li4crvn3dd9ssq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

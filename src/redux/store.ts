@@ -3,24 +3,28 @@ import {
 } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
+import AsyncStorage from '@react-native-community/async-storage';
+import { persistStore, persistReducer } from 'redux-persist';
 import rootReducers from './rootReducers';
-import { Auth } from '../interfaces';
-
-const initialState = {
-  auth: <Auth>{},
-};
 
 const configureStore = () => {
+  const persistConfig = {
+    key: 'persistedReducer',
+    storage: AsyncStorage,
+  };
+
+  const persistedReducer = persistReducer(persistConfig, rootReducers);
+
   const middlewares = [thunk, logger];
   const composeEnhancers = compose;
   const store = createStore(
-    rootReducers,
-    initialState,
+    persistedReducer,
     composeEnhancers(applyMiddleware(...middlewares)),
   );
   return store;
 };
 
 const store = configureStore();
+const persistor = persistStore(store);
 
-export default store;
+export { store, persistor };
