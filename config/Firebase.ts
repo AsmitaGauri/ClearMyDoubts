@@ -1,0 +1,15 @@
+import firebase from 'firebase';
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyCjcbV-Xhe74zqELifiPDUxUZ9_CfbqzV0',
+  authDomain: 'clear-my-doubts-9ca27.firebaseapp.com',
+  projectId: 'clear-my-doubts-9ca27',
+  storageBucket: 'clear-my-doubts-9ca27.appspot.com',
+  messagingSenderId: '1035727886720',
+  appId: '1:1035727886720:web:4ffa562716e7e3bf3a4965'
+};
+
+// Initialize Firebase
+const Firebase = firebase.initializeApp(firebaseConfig);
+
+export default Firebase;

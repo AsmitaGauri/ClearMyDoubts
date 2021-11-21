@@ -1,0 +1,4 @@
+const SET_TEXT = 'SET_TEXT';
+const DELETE_TEXT = 'DELETE_TEXT';
+
+export { SET_TEXT, DELETE_TEXT };
