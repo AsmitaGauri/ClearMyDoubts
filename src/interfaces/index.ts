@@ -20,4 +20,18 @@ interface Auth {
   error: Error,
 }
 
-export type { Auth, User, Error };
+interface Post{
+  id: string,
+  title: string,
+  content: string,
+  userName: string,
+  userPicture: string | null,
+  postingDate: string,
+  likes: number,
+  replies: number,
+  views: number,
+}
+
+export type {
+  Auth, User, Error, Post,
+};

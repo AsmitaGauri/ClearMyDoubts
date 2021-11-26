@@ -4,6 +4,10 @@ import {
 } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import { fetchAllPosts } from '../redux/posts/service';
+import selectPostsState from '../redux/posts/selector';
 
 const popularTags = [
   {
@@ -26,127 +30,137 @@ const popularTags = [
   },
 ];
 
-const posts = [
-  {
-    id: 1,
-    userImage: '',
-    userName: 'Asmita Gauri',
-    title: 'How to be good in programming?',
-    postingTime: new Date(),
-    content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem',
-    votes: 100,
-    replies: 200,
-    views: 300,
-  },
-  {
-    id: 2,
-    userImage: '',
-    userName: 'Asmita Gauri',
-    title: 'How to be good in programming?',
-    postingTime: new Date(),
-    content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem',
-    votes: 100,
-    replies: 200,
-    views: 300,
-  },
-  {
-    id: 3,
-    userImage: '',
-    userName: 'Asmita Gauri',
-    title: 'How to be good in programming?',
-    postingTime: new Date(),
-    content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem',
-    votes: 100,
-    replies: 200,
-    views: 300,
-  },
-];
+// const posts = [
+//   {
+//     id: 1,
+//     userImage: '',
+//     userName: 'Asmita Gauri',
+//     title: 'How to be good in programming?',
+//     postingTime: new Date(),
+//     content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem',
+//     votes: 100,
+//     replies: 200,
+//     views: 300,
+//   },
+//   {
+//     id: 2,
+//     userImage: '',
+//     userName: 'Asmita Gauri',
+//     title: 'How to be good in programming?',
+//     postingTime: new Date(),
+//     content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem',
+//     votes: 100,
+//     replies: 200,
+//     views: 300,
+//   },
+//   {
+//     id: 3,
+//     userImage: '',
+//     userName: 'Asmita Gauri',
+//     title: 'How to be good in programming?',
+//     postingTime: new Date(),
+//     content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem',
+//     votes: 100,
+//     replies: 200,
+//     views: 300,
+//   },
+// ];
 
-const HomeScreen = () => (
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.container}>
-        <View style={styles.avatar}>
-          <Avatar
-            rounded
-            icon={{
-              name: 'user', type: 'font-awesome', color: 'black', size: 35,
-            }}
-          />
-        </View>
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Hi, Asmita</Text>
-          <Text style={styles.subHeaderText}>Get all your doubts cleared!</Text>
-        </View>
-        <View style={styles.footer}>
-          <Text style={styles.popularHeading}>Poupular Topics</Text>
-          <View style={styles.popularSection}>
-            <VirtualizedList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={popularTags}
-              keyExtractor={(item:any) => item.id}
-              getItem={(data, index) => data[index]}
-              getItemCount={(data: any) => data.length}
-              renderItem={({ item }) => (
-                <View style={{ ...styles.popularTopics, backgroundColor: item.color }}>
-                  <Text style={styles.tag}>{item.tagName}</Text>
-                </View>
-              )}
+const HomeScreen = (props:any) => {
+  const { posts } = props;
+  React.useEffect(() => {
+    props.fetchAllPosts();
+  }, []);
+
+  return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.container}>
+          <View style={styles.avatar}>
+            <Avatar
+              rounded
+              icon={{
+                name: 'user', type: 'font-awesome', color: 'black', size: 35,
+              }}
             />
           </View>
+          <View style={styles.header}>
+            <Text style={styles.headerText}>Hi, Asmita</Text>
+            <Text style={styles.subHeaderText}>Get all your doubts cleared!</Text>
+          </View>
+          <View style={styles.footer}>
+            <Text style={styles.popularHeading}>Poupular Topics</Text>
+            <View style={styles.popularSection}>
+              <VirtualizedList
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={popularTags}
+                keyExtractor={(item:any) => item.id}
+                getItem={(data, index) => data[index]}
+                getItemCount={(data: any) => data.length}
+                renderItem={({ item }) => (
+                  <View style={{ ...styles.popularTopics, backgroundColor: item.color }}>
+                    <Text style={styles.tag}>{item.tagName}</Text>
+                  </View>
+                )}
+              />
+            </View>
 
-          <Text style={styles.popularHeading}>Recent Posts</Text>
-          <View>
-            <VirtualizedList
-              showsVerticalScrollIndicator={false}
-              data={posts}
-              keyExtractor={(item:any) => item.id}
-              getItem={(data, index) => data[index]}
-              getItemCount={(data: any) => data.length}
-              renderItem={({ item }) => (
-                <View style={styles.postBox}>
-                  <View style={styles.postHeader}>
-                    <Avatar
-                      rounded
-                      icon={{
-                        name: 'user', type: 'font-awesome', color: 'black', size: 35,
-                      }}
-                    />
-                    <View style={styles.postHeaderDetails}>
-                      <Text style={styles.postTitle}>{item.title}</Text>
-                      <View style={styles.userDetails}>
-                        <Text style={styles.userName}>{item.userName}</Text>
-                        <Text style={styles.postTime}>{`${item.postingTime.getHours()}:${item.postingTime.getMinutes()}`}</Text>
+            <Text style={styles.popularHeading}>Recent Posts</Text>
+            <View>
+              {posts.posts?.length ? (
+                <VirtualizedList
+                  showsVerticalScrollIndicator={false}
+                  data={posts.posts}
+                  keyExtractor={(item:any) => item.id}
+                  getItem={(data, index) => data[index]}
+                  getItemCount={(data: any) => data.length}
+                  renderItem={({ item }) => (
+                    <View style={styles.postBox}>
+                      <View style={styles.postHeader}>
+                        <Avatar
+                          rounded
+                          icon={{
+                            name: 'user', type: 'font-awesome', color: 'black', size: 35,
+                          }}
+                        />
+                        <View style={styles.postHeaderDetails}>
+                          <Text style={styles.postTitle}>{item.title}</Text>
+                          <View style={styles.userDetails}>
+                            <Text style={styles.userName}>{item.userName}</Text>
+                            <Text style={styles.postTime}>{`${(new Date(item.postingTime)).getHours()}:${(new Date(item.postingTime)).getMinutes()}`}</Text>
+                          </View>
+                        </View>
+                      </View>
+                      <View>
+                        <Text>{item.content}</Text>
+                      </View>
+                      <View style={styles.postStatistics}>
+                        <View style={styles.postIcon}>
+                          <FontAwesome name="thumbs-up" size={20} color="grey" style={styles.icon} />
+                          <Text>{item.votes}</Text>
+                        </View>
+                        <View style={styles.postStatistics}>
+                          <FontAwesome name="comment" size={20} color="grey" style={styles.icon} />
+                          <Text>{item.votes}</Text>
+                        </View>
+                        <View style={styles.postStatistics}>
+                          <FontAwesome name="eye" size={20} color="grey" style={styles.icon} />
+                          <Text>{item.votes}</Text>
+                        </View>
                       </View>
                     </View>
-                  </View>
-                  <View>
-                    <Text>{item.content}</Text>
-                  </View>
-                  <View style={styles.postStatistics}>
-                    <View style={styles.postIcon}>
-                      <FontAwesome name="thumbs-up" size={20} color="grey" style={styles.icon} />
-                      <Text>{item.votes}</Text>
-                    </View>
-                    <View style={styles.postStatistics}>
-                      <FontAwesome name="comment" size={20} color="grey" style={styles.icon} />
-                      <Text>{item.votes}</Text>
-                    </View>
-                    <View style={styles.postStatistics}>
-                      <FontAwesome name="eye" size={20} color="grey" style={styles.icon} />
-                      <Text>{item.votes}</Text>
-                    </View>
-                  </View>
-                </View>
-              )}
-            />
+                  )}
+                />
+              ) : <Text>No recent posts</Text>}
+            </View>
+            {/* <FAB style={styles.fab} /> */}
           </View>
         </View>
-      </View>
-    </ScrollView>
-  </TouchableWithoutFeedback>
-);
+      </ScrollView>
+    </TouchableWithoutFeedback>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -266,4 +280,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+const mapStateToProps = (state: any) => ({
+  posts: selectPostsState(state),
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  fetchAllPosts: bindActionCreators(fetchAllPosts, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
