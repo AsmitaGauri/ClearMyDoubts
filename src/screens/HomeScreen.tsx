@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
     marginTop: 10,
-    width: 50,
+    width: 45,
     marginLeft: '80%',
   },
   popularHeading: {
