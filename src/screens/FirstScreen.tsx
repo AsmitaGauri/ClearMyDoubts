@@ -36,10 +36,6 @@ export class FirstScreen extends Component<Props> {
     });
   }
 
-  //   componentWillUnmount() {
-  //     SplashScreen.hide();
-  //   }
-
   resetAction = (comp: string) => CommonActions.reset({
     index: 1,
     routes: [
