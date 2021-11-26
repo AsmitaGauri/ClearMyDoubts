@@ -1,34 +1,15 @@
 import React from 'react';
 import {
-  TouchableWithoutFeedback, Keyboard, ScrollView, StyleSheet, View, Text, VirtualizedList,
+  TouchableWithoutFeedback, Keyboard, ScrollView, StyleSheet, View, Text, VirtualizedList, Button,
 } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { fetchAllPosts } from '../redux/posts/service';
 import selectPostsState from '../redux/posts/selector';
-
-const popularTags = [
-  {
-    tagName: 'C++',
-    id: 1,
-    color: '#229DB8',
-    postCount: 5,
-  },
-  {
-    tagName: 'Java',
-    id: 2,
-    color: '#4AC29A',
-    postCount: 4,
-  },
-  {
-    tagName: 'Python',
-    id: 3,
-    color: '#D66D75',
-    postCount: 3,
-  },
-];
+import PopularTopics from './PopularTopics';
 
 // const posts = [
 //   {
@@ -76,37 +57,25 @@ const HomeScreen = (props:any) => {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.container}>
-          <View style={styles.avatar}>
-            <Avatar
-              rounded
-              icon={{
-                name: 'user', type: 'font-awesome', color: 'black', size: 35,
-              }}
-            />
-          </View>
+          <TouchableOpacity onPress={() => props.navigation.navigate('ProfileScreen')}>
+            <View style={styles.avatar}>
+              <Avatar
+                rounded
+                icon={{
+                  name: 'user', type: 'font-awesome', color: 'black', size: 35,
+                }}
+              />
+            </View>
+          </TouchableOpacity>
+
           <View style={styles.header}>
             <Text style={styles.headerText}>Hi, Asmita</Text>
             <Text style={styles.subHeaderText}>Get all your doubts cleared!</Text>
+            <View style={styles.button}><Button title="Ask a question" color="grey" onPress={() => props.navigation.navigate('AskQuestion')} /></View>
           </View>
           <View style={styles.footer}>
-            <Text style={styles.popularHeading}>Poupular Topics</Text>
-            <View style={styles.popularSection}>
-              <VirtualizedList
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                data={popularTags}
-                keyExtractor={(item:any) => item.id}
-                getItem={(data, index) => data[index]}
-                getItemCount={(data: any) => data.length}
-                renderItem={({ item }) => (
-                  <View style={{ ...styles.popularTopics, backgroundColor: item.color }}>
-                    <Text style={styles.tag}>{item.tagName}</Text>
-                  </View>
-                )}
-              />
-            </View>
-
-            <Text style={styles.popularHeading}>Recent Posts</Text>
+            <PopularTopics />
+            <Text style={styles.recentPostsHeading}>Recent Posts</Text>
             <View>
               {posts.posts?.length ? (
                 <VirtualizedList
@@ -140,11 +109,11 @@ const HomeScreen = (props:any) => {
                           <FontAwesome name="thumbs-up" size={20} color="grey" style={styles.icon} />
                           <Text>{item.votes}</Text>
                         </View>
-                        <View style={styles.postStatistics}>
+                        <View style={styles.postIcon}>
                           <FontAwesome name="comment" size={20} color="grey" style={styles.icon} />
                           <Text>{item.votes}</Text>
                         </View>
-                        <View style={styles.postStatistics}>
+                        <View style={styles.postIcon}>
                           <FontAwesome name="eye" size={20} color="grey" style={styles.icon} />
                           <Text>{item.votes}</Text>
                         </View>
@@ -205,30 +174,6 @@ const styles = StyleSheet.create({
     width: 45,
     marginLeft: '80%',
   },
-  popularHeading: {
-    fontSize: 18,
-    fontFamily: 'Comfortaa-Medium',
-    marginBottom: 20,
-  },
-  popularSection: {
-    height: 150,
-    marginBottom: 20,
-  },
-  popularTopics: {
-    // backgroundColor: '#229DB8',
-    width: 150,
-    height: 150,
-    marginRight: 10,
-    borderRadius: 10,
-  },
-  tag: {
-    color: 'white',
-    display: 'flex',
-    alignSelf: 'center',
-    marginTop: '30%',
-    fontSize: 20,
-    fontFamily: 'Comfortaa-Medium',
-  },
   postBox: {
     height: 140,
     backgroundColor: 'white',
@@ -268,7 +213,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 5,
+    marginTop: 10,
     justifyContent: 'space-between',
   },
   postIcon: {
@@ -277,6 +222,15 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 5,
+  },
+  recentPostsHeading: {
+    fontSize: 18,
+    fontFamily: 'Comfortaa-Medium',
+    marginBottom: 20,
+  },
+  button: {
+    width: 150,
+    marginTop: 10,
   },
 });
 
