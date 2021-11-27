@@ -31,7 +31,7 @@ const PostCard = (props: any) => {
             </View>
           </View>
           <View>
-            <Text>{item.content}</Text>
+            <Text numberOfLines={2}>{item.content}</Text>
           </View>
           <View style={styles.postStatistics}>
             <View style={styles.postIcon}>
@@ -40,11 +40,11 @@ const PostCard = (props: any) => {
             </View>
             <View style={styles.postIcon}>
               <FontAwesome name="comment" size={20} color="grey" style={styles.icon} />
-              <Text>{item.votes}</Text>
+              <Text>{item.replies}</Text>
             </View>
             <View style={styles.postIcon}>
               <FontAwesome name="eye" size={20} color="grey" style={styles.icon} />
-              <Text>{item.votes}</Text>
+              <Text>{item.views}</Text>
             </View>
           </View>
         </View>
@@ -55,7 +55,7 @@ const PostCard = (props: any) => {
 
 const styles = StyleSheet.create({
   postBox: {
-    height: 140,
+    maxHeight: '100%',
     backgroundColor: 'white',
     marginBottom: 10,
     borderRadius: 5,

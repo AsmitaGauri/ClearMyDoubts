@@ -13,6 +13,7 @@ const postReducer = (state = initialState, action:any) => {
     // eslint-disable-next-line
       var newPosts= state.posts;
       newPosts.push(action.payload);
+      console.log(action.payload);
       return { ...state, posts: newPosts };
     default:
       return state;

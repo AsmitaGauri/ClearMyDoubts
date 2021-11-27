@@ -1,24 +1,28 @@
 import { Dispatch } from 'redux';
 import { Firestore as firestore } from '../../../config/Firebase';
-import { Post } from '../../interfaces';
-import { fetchPosts, createPost } from './action';
+import { fetchPosts } from './action';
 
 const fetchAllPosts = () => (dispatch: Dispatch) => {
-  firestore.collection('posts').onSnapshot((querySnapshot) => {
+  firestore.collection('posts').orderBy('postingTime', 'desc').onSnapshot((querySnapshot) => {
     const posts:any = [];
     querySnapshot.forEach((doc) => {
-      posts.push(doc.data());
+      const { ref, ...post } = doc.data();
+      posts.push(post);
     });
     dispatch(fetchPosts(posts));
   });
 };
 
-const createAPost = (post : Post) => (dispatch: Dispatch) => {
+const createAPost = (post : any) => () => {
   firestore.collection('posts').add({
     ...post,
   })
     .then((resp) => {
-      dispatch(createPost(resp));
+      console.log(resp);
+      // dispatch(createPost(resps));
+    })
+    .catch((err) => {
+      console.log(err.message);
     });
 };
 

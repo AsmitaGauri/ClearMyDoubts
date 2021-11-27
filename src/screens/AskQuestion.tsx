@@ -5,28 +5,45 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { Firestore } from '../../config/Firebase';
 import selectAuthState from '../redux/auth/selector';
-import { createPost } from '../redux/posts/action';
 import selectPostsState from '../redux/posts/selector';
+import { createAPost } from '../redux/posts/service';
 
 const AskQuestion = (props:any) => {
   const [title, setTitle] = React.useState('');
   const [description, setDescription] = React.useState('');
-
+  const [userName, setUserName] = React.useState('');
   const submitPost = () => {
     const post = {
       title,
       content: description,
       uid: props.auth.user.uid,
-      id: props.posts.posts.length,
+      id: props.posts.posts.length + 1,
       views: 0,
       votes: 0,
       replies: 0,
       postingTime: String(new Date()),
-      userName: props.auth.user.displayName,
+      userName,
     };
-    props.createPost(post);
+    props.createAPost(post);
+    props.navigation.navigate('HomeScreen');
   };
+
+  React.useEffect(() => {
+    if (props.auth.user.displayName === null) {
+      Firestore.collection('users').where('uid', '==', props.auth.user.uid).get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            setUserName(doc.data().userName);
+          });
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    }
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -109,6 +126,6 @@ const mapStateToProps = (state: any) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  createPost: bindActionCreators(createPost, dispatch),
+  createAPost: bindActionCreators(createAPost, dispatch),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(AskQuestion);
