@@ -13,10 +13,11 @@ const fetchAllPosts = () => (dispatch: Dispatch) => {
   });
 };
 
-const createAPost = (post : Post, length: number) => (dispatch: Dispatch) => {
+const createAPost = (post : Post, length: number, uid: string) => (dispatch: Dispatch) => {
   firestore.collection('posts').add({
     ...post,
     id: length + 1,
+    uid,
   })
     .then((resp) => {
       dispatch(createPost(resp));
