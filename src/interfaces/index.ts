@@ -30,6 +30,7 @@ interface Post{
   likes: number,
   replies: number,
   views: number,
+  comments: Object[],
 }
 
 export type {

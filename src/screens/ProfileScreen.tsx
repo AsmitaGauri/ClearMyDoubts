@@ -6,6 +6,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Avatar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { ScrollView } from 'react-native-gesture-handler';
 import selectPostsState from '../redux/posts/selector';
 import selectAuthState from '../redux/auth/selector';
 import PostCard from './PostCard';
@@ -13,7 +14,7 @@ import { logout } from '../redux/auth/service';
 import { Firestore } from '../../config/Firebase';
 
 const ProfileScreen = (props:any) => {
-  const { auth } = props;
+  const { auth, navigation } = props;
   const [userName, setUserName] = React.useState(auth.user.displayName ?? '');
   const [userPosts, setUserPosts] = React.useState([]);
   React.useEffect(() => {
@@ -37,41 +38,44 @@ const ProfileScreen = (props:any) => {
 
   const handleLogout = () => {
     props.logout();
-    props.navigation.navigate('Login');
+    navigation.navigate('Login');
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <FontAwesome name="arrow-left" size={30} color="white" onPress={() => props.navigation.goBack()} />
-        <View style={styles.avatar}>
-          <Avatar
-            rounded
-            icon={{
-              name: 'user', type: 'font-awesome', color: 'white', size: 35,
-            }}
-          />
-        </View>
-        <View style={styles.logout}>
-          <Button title="Logout" onPress={handleLogout} />
-        </View>
-        <Text style={styles.userName}>{userName}</Text>
-        <View style={styles.postDetails}>
-          <View style={styles.postCount}>
-            <Text style={styles.postStats}>24</Text>
-            <Text style={styles.postStats}>Posts</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <FontAwesome name="arrow-left" size={30} color="white" onPress={() => props.navigation.goBack()} />
+          <View style={styles.avatar}>
+            <Avatar
+              rounded
+              icon={{
+                name: 'user', type: 'font-awesome', color: 'white', size: 35,
+              }}
+            />
           </View>
-          <View style={{ ...styles.postCount, ...styles.voteCont }}>
-            <Text style={styles.postStats}>120</Text>
-            <Text style={styles.postStats}>Votes</Text>
+          <View style={styles.logout}>
+            <Button title="Logout" onPress={handleLogout} color="grey" />
           </View>
+          <Text style={styles.userName}>{userName}</Text>
+          <View style={styles.postDetails}>
+            <View style={styles.postCount}>
+              <Text style={styles.postStats}>24</Text>
+              <Text style={styles.postStats}>Posts</Text>
+            </View>
+            <View style={{ ...styles.postCount, ...styles.voteCont }}>
+              <Text style={styles.postStats}>120</Text>
+              <Text style={styles.postStats}>Votes</Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.footer}>
+          <Text style={styles.recentPostsHeading}>Recent Posts</Text>
+          {userPosts.length
+            ? <PostCard posts={userPosts} navigation={navigation} /> : <Text>No Recent Posts</Text>}
         </View>
       </View>
-      <View style={styles.footer}>
-        <Text style={styles.recentPostsHeading}>Recent Posts</Text>
-        {userPosts.length ? <PostCard posts={userPosts} /> : <Text>No Recent Posts</Text>}
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 

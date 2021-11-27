@@ -14,20 +14,25 @@ const AskQuestion = (props:any) => {
   const [title, setTitle] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [userName, setUserName] = React.useState('');
+  const [error, setError] = React.useState('');
   const submitPost = () => {
-    const post = {
-      title,
-      content: description,
-      uid: props.auth.user.uid,
-      id: props.posts.posts.length + 1,
-      views: 0,
-      votes: 0,
-      replies: 0,
-      postingTime: String(new Date()),
-      userName,
-    };
-    props.createAPost(post);
-    props.navigation.navigate('HomeScreen');
+    if (title === '' || description === '') {
+      setError('Please fill all details');
+    } else {
+      const post = {
+        title,
+        content: description,
+        uid: props.auth.user.uid,
+        id: props.posts.posts.length + 1,
+        views: 0,
+        votes: 0,
+        replies: 0,
+        postingTime: String(new Date()),
+        userName,
+      };
+      props.createAPost(post);
+      props.navigation.navigate('HomeScreen');
+    }
   };
 
   React.useEffect(() => {
@@ -51,6 +56,7 @@ const AskQuestion = (props:any) => {
         <FontAwesome name="arrow-left" size={30} color="black" onPress={() => props.navigation.goBack()} />
       </View>
       <Text style={styles.headerText}>Ask Doubt</Text>
+      <Text style={styles.error}>{error}</Text>
       <View style={styles.form}>
         <View style={styles.inputBox}>
           <Text style={styles.inputTitle}>Title</Text>
@@ -117,6 +123,13 @@ const styles = StyleSheet.create({
   form: {
     marginTop: '20%',
     padding: 10,
+  },
+  error: {
+    color: 'red',
+    fontFamily: 'Comfortaa-Medium',
+    marginLeft: 20,
+    marginTop: 10,
+    fontSize: 18,
   },
 });
 

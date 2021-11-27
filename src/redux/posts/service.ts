@@ -26,4 +26,24 @@ const createAPost = (post : any) => () => {
     });
 };
 
-export { fetchAllPosts, createAPost };
+const addReply = (reply: any) => () => {
+  firestore.collection('posts').where('id', '==', reply.postID).get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        // eslint-disable-next-line
+        var post = doc.data();
+        // eslint-disable-next-line
+        var comments = post.comments ?? [];
+        comments.push(reply);
+        firestore.collection('posts').doc(doc.id).set({
+          ...doc.data(),
+          comments,
+        });
+      });
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+
+export { fetchAllPosts, createAPost, addReply };

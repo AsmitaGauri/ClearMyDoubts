@@ -6,6 +6,7 @@ import Login from '../screens/Login';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import AskQuestion from '../screens/AskQuestion';
+import PostDetails from '../screens/PostDetails';
 
 const Stack = createStackNavigator();
 const StackNavigator = () => (
@@ -16,6 +17,7 @@ const StackNavigator = () => (
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
       <Stack.Screen name="AskQuestion" component={AskQuestion} />
+      <Stack.Screen name="PostDetails" component={PostDetails} />
     </Stack.Navigator>
   </NavigationContainer>
 );

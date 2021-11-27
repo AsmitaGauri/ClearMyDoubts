@@ -50,7 +50,7 @@ import selectAuthState from '../redux/auth/selector';
 // ];
 
 const HomeScreen = (props:any) => {
-  const { posts, auth } = props;
+  const { posts, auth, navigation } = props;
   const [userName, setUserName] = React.useState(auth.user.displayName ?? '');
   React.useEffect(() => {
     props.fetchAllPosts();
@@ -97,7 +97,7 @@ const HomeScreen = (props:any) => {
             <Text style={styles.recentPostsHeading}>Recent Posts</Text>
             <View>
               {posts.posts?.length ? (
-                <PostCard posts={posts.posts} />
+                <PostCard posts={posts.posts} navigation={navigation} />
               ) : <Text>No recent posts</Text>}
             </View>
             {/* <FAB style={styles.fab} /> */}
