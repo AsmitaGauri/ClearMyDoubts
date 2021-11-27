@@ -65,6 +65,7 @@ const Login = (props: any) => {
           </View>
 
           <Animatable.View pointerEvents={auth.isLoggingIn ? 'none' : 'auto'} style={auth.isLoggingIn ? styles.inputs_disabled : styles.footer}>
+            <Text style={styles.error}>{auth.error.message}</Text>
             <View style={styles.inputFeild}>
               <FontAwesome
                 name="envelope-o"
@@ -133,7 +134,6 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 30,
-    fontWeight: 'bold',
     paddingVertical: 10,
     color: 'white',
     fontFamily: 'Comfortaa-Medium',
@@ -147,6 +147,8 @@ const styles = StyleSheet.create({
   },
   error: {
     color: 'red',
+    marginBottom: 10,
+    fontFamily: 'Comfortaa-Medium',
   },
   singleFeild: {
     display: 'flex',
@@ -207,6 +209,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 30,
   },
+
 });
 
 const mapStateToProps = (state: any) => ({

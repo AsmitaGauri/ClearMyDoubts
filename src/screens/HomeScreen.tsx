@@ -10,6 +10,8 @@ import { fetchAllPosts } from '../redux/posts/service';
 import selectPostsState from '../redux/posts/selector';
 import PopularTopics from './PopularTopics';
 import PostCard from './PostCard';
+import { Firestore } from '../../config/Firebase';
+import selectAuthState from '../redux/auth/selector';
 
 // const posts = [
 //   {
@@ -48,9 +50,22 @@ import PostCard from './PostCard';
 // ];
 
 const HomeScreen = (props:any) => {
-  const { posts } = props;
+  const { posts, auth } = props;
+  const [userName, setUserName] = React.useState(auth.user.displayName ?? '');
   React.useEffect(() => {
     props.fetchAllPosts();
+    if (auth.user.displayName === null) {
+      Firestore.collection('users').where('uid', '==', auth.user.uid).get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            setUserName(doc.data().userName);
+          });
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    }
   }, []);
 
   return (
@@ -69,7 +84,11 @@ const HomeScreen = (props:any) => {
           </TouchableOpacity>
 
           <View style={styles.header}>
-            <Text style={styles.headerText}>Hi, Asmita</Text>
+            <Text style={styles.headerText}>
+              Hi,
+              {' '}
+              { userName }
+            </Text>
             <Text style={styles.subHeaderText}>Get all your doubts cleared!</Text>
             <View style={styles.button}><Button title="Ask a question" color="grey" onPress={() => props.navigation.navigate('AskQuestion')} /></View>
           </View>
@@ -145,6 +164,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state: any) => ({
   posts: selectPostsState(state),
+  auth: selectAuthState(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

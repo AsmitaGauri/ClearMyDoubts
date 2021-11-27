@@ -1,20 +1,45 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  Button, StyleSheet, Text, View,
+} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Avatar } from 'react-native-elements';
 import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import selectPostsState from '../redux/posts/selector';
 import selectAuthState from '../redux/auth/selector';
 import PostCard from './PostCard';
+import { logout } from '../redux/auth/service';
+import { Firestore } from '../../config/Firebase';
 
 const ProfileScreen = (props:any) => {
+  const { auth } = props;
+  const [userName, setUserName] = React.useState(auth.user.displayName ?? '');
   const [userPosts, setUserPosts] = React.useState([]);
   React.useEffect(() => {
     // eslint-disable-next-line
     var currUserPosts = [];
     currUserPosts = props.posts.posts.filter((post:any) => post.uid === props.auth.user.uid);
     setUserPosts(currUserPosts);
+    if (auth.user.displayName === null) {
+      Firestore.collection('users').where('uid', '==', auth.user.uid).get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+            setUserName(doc.data().userName);
+          });
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    }
   }, []);
+
+  const handleLogout = () => {
+    props.logout();
+    props.navigation.navigate('Login');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -27,7 +52,10 @@ const ProfileScreen = (props:any) => {
             }}
           />
         </View>
-        <Text style={styles.userName}>Asmita Gauri</Text>
+        <View style={styles.logout}>
+          <Button title="Logout" onPress={handleLogout} />
+        </View>
+        <Text style={styles.userName}>{userName}</Text>
         <View style={styles.postDetails}>
           <View style={styles.postCount}>
             <Text style={styles.postStats}>24</Text>
@@ -77,6 +105,7 @@ const styles = StyleSheet.create({
     width: 77,
     padding: 20,
     borderRadius: 40,
+    marginBottom: 10,
   },
   postCount: {
     backgroundColor: '#DADADA',
@@ -104,6 +133,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Comfortaa-Medium',
     marginBottom: 20,
   },
+  logout: {
+    width: 150,
+  },
 });
 
 const mapStateToProps = (state: any) => ({
@@ -111,4 +143,8 @@ const mapStateToProps = (state: any) => ({
   auth: selectAuthState(state),
 });
 
-export default connect(mapStateToProps, null)(ProfileScreen);
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  logout: bindActionCreators(logout, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);

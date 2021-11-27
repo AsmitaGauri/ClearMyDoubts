@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable arrow-body-style */
 import { Dispatch } from 'redux';
-import { Auth as auth } from '../../../config/Firebase';
+import { Auth as auth, Firestore as firestore } from '../../../config/Firebase';
 import {
   registrationRequested,
   registrationSuccessful,
@@ -12,7 +12,7 @@ import {
   loginFailed,
 } from './action';
 
-const registerWithEmailAndPassword = (userEmail: string, password: string) => {
+const registerWithEmailAndPassword = (userEmail: string, password: string, name: string) => {
   return (dispatch: Dispatch) => {
     dispatch(registrationRequested());
     auth.createUserWithEmailAndPassword(userEmail, password)
@@ -20,9 +20,7 @@ const registerWithEmailAndPassword = (userEmail: string, password: string) => {
         const uid = userCredentials
                   && userCredentials.user
                   && userCredentials.user.uid;
-        const displayName = userCredentials
-                          && userCredentials.user
-                          && userCredentials.user.displayName;
+        const displayName = name;
         const email = userCredentials
                     && userCredentials.user
                     && userCredentials.user.email;
@@ -38,6 +36,10 @@ const registerWithEmailAndPassword = (userEmail: string, password: string) => {
         const idToken = userCredentials
                        && userCredentials.user
                        && await userCredentials.user.getIdToken();
+        firestore.collection('users').add({
+          uid,
+          userName: displayName,
+        });
         dispatch(registrationSuccessful({
           uid, displayName, email, emailVerified, phoneNumber, photoURL, idToken,
         }));

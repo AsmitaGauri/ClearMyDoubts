@@ -203,7 +203,7 @@ const Register = (props: any) => {
         && isAllValidated.isEmailValid
         && isAllValidated.isPassValid
         && isAllValidated.isConfirmPassSame) {
-      props.registerWithEmailAndPassword(userDetails.email, userDetails.password);
+      props.registerWithEmailAndPassword(userDetails.email, userDetails.password, userDetails.name);
     }
   };
 
@@ -216,12 +216,13 @@ const Register = (props: any) => {
             <Text style={styles.header}>Welcome Onboard!</Text>
             <Text style={styles.subHeader}>Let us help you with Clearing your doubts</Text>
           </View>
-          {auth.isRegistering && <ActivityIndicator size={80} animating color="white" style={styles.activityIndicator} />}
+          {auth.isRegistering && <ActivityIndicator size={80} animating color="black" style={styles.activityIndicator} />}
           <Animatable.View
             animation="fadeInUpBig"
             pointerEvents={auth.isRegistering ? 'none' : 'auto'}
             style={auth.isRegistering ? styles.inputs_disabled : styles.footer}
           >
+            <Text style={styles.error}>{auth.error.message}</Text>
             <View style={styles.feild}>
               <View style={styles.inputFeild}>
                 <FontAwesome
