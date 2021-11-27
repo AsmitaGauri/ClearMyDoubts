@@ -42,7 +42,7 @@ const PostCard = (props: any) => {
               </View>
               <View style={styles.postIcon}>
                 <FontAwesome name="comment" size={20} color="grey" style={styles.icon} />
-                <Text>{item.replies}</Text>
+                <Text>{item.comments ? item.comments.length : 0}</Text>
               </View>
               <View style={styles.postIcon}>
                 <FontAwesome name="eye" size={20} color="grey" style={styles.icon} />
