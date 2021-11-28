@@ -18,8 +18,9 @@ Let me go get you through all the features that this app contains 😀
    1) React Native
    2) Firebase
 
-   Demo Link:- https://drive.google.com/file/d/1nJGMv0Rxs5M7tPbgc5eiua15K9Tkgv8H/view?usp=sharing
-Steps to run the app
-1) npm install
-2) npx react-native run-android
+   Demo Link:- https://drive.google.com/file/d/1nJGMv0Rxs5M7tPbgc5eiua15K9Tkgv8H/view?usp=sharing <br/>
+   
+3) Steps to run the app <br/>
+=> npm install <br/>
+=> npx react-native run-android <br/>
 (Make sure you have an emulator ready or your physical device is connected)
