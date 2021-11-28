@@ -1,5 +1,5 @@
 # Welcome to Clear my Doubts App!!
-Let me go get you through all the features that this app contains 😀
+Let me get you through all the features that this app contains 😀
 
 1) Auth Screens <br/>
 => You can either Register or Login if you have an account already.<br/>
