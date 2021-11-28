@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, VirtualizedList } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { View } from 'react-native-animatable';
 import { Avatar } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -8,51 +8,48 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const PostCard = (props: any) => {
   const { posts } = props;
   return (
-    <VirtualizedList
-      showsVerticalScrollIndicator={false}
-      data={posts}
-      keyExtractor={(item:any) => item.id}
-      getItem={(data, index) => data[index]}
-      getItemCount={(data: any) => data.length}
-      renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => props.navigation.push('PostDetails', item)}>
-          <View style={styles.postBox}>
-            <View style={styles.postHeader}>
-              <Avatar
-                rounded
-                icon={{
-                  name: 'user', type: 'font-awesome', color: 'black', size: 35,
-                }}
-              />
-              <View style={styles.postHeaderDetails}>
-                <Text style={styles.postTitle}>{item.title}</Text>
-                <View style={styles.userDetails}>
-                  <Text style={styles.userName}>{item.userName}</Text>
-                  <Text style={styles.postTime}>{`${(new Date(item.postingTime)).getHours()}:${(new Date(item.postingTime)).getMinutes()}`}</Text>
+    <>
+      {
+        posts.map((item:any) => (
+          <TouchableOpacity onPress={() => props.navigation.push('PostDetails', item)} key={item.id}>
+            <View style={styles.postBox}>
+              <View style={styles.postHeader}>
+                <Avatar
+                  rounded
+                  icon={{
+                    name: 'user', type: 'font-awesome', color: 'black', size: 35,
+                  }}
+                />
+                <View style={styles.postHeaderDetails}>
+                  <Text style={styles.postTitle}>{item.title}</Text>
+                  <View style={styles.userDetails}>
+                    <Text style={styles.userName}>{item.userName}</Text>
+                    <Text style={styles.postTime}>{`${(new Date(item.postingTime)).getHours()}:${(new Date(item.postingTime)).getMinutes()}`}</Text>
+                  </View>
+                </View>
+              </View>
+              <View>
+                <Text numberOfLines={2}>{item.content}</Text>
+              </View>
+              <View style={styles.postStatistics}>
+                <View style={styles.postIcon}>
+                  <FontAwesome name="thumbs-up" size={20} color="grey" style={styles.icon} />
+                  <Text>{item.votes}</Text>
+                </View>
+                <View style={styles.postIcon}>
+                  <FontAwesome name="comment" size={20} color="grey" style={styles.icon} />
+                  <Text>{item.comments ? item.comments.length : 0}</Text>
+                </View>
+                <View style={styles.postIcon}>
+                  <FontAwesome name="eye" size={20} color="grey" style={styles.icon} />
+                  <Text>{item.views}</Text>
                 </View>
               </View>
             </View>
-            <View>
-              <Text numberOfLines={2}>{item.content}</Text>
-            </View>
-            <View style={styles.postStatistics}>
-              <View style={styles.postIcon}>
-                <FontAwesome name="thumbs-up" size={20} color="grey" style={styles.icon} />
-                <Text>{item.votes}</Text>
-              </View>
-              <View style={styles.postIcon}>
-                <FontAwesome name="comment" size={20} color="grey" style={styles.icon} />
-                <Text>{item.comments ? item.comments.length : 0}</Text>
-              </View>
-              <View style={styles.postIcon}>
-                <FontAwesome name="eye" size={20} color="grey" style={styles.icon} />
-                <Text>{item.views}</Text>
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
-      )}
-    />
+          </TouchableOpacity>
+        ))
+      }
+    </>
   );
 };
 

@@ -11,29 +11,15 @@ import selectPostsState from '../redux/posts/selector';
 import selectAuthState from '../redux/auth/selector';
 import PostCard from './PostCard';
 import { logout } from '../redux/auth/service';
-import { Firestore } from '../../config/Firebase';
 
 const ProfileScreen = (props:any) => {
-  const { auth, navigation } = props;
-  const [userName, setUserName] = React.useState(auth.user.displayName ?? '');
+  const { auth, navigation, route } = props;
   const [userPosts, setUserPosts] = React.useState([]);
   React.useEffect(() => {
     // eslint-disable-next-line
     var currUserPosts = [];
-    currUserPosts = props.posts.posts.filter((post:any) => post.uid === props.auth.user.uid);
+    currUserPosts = props.posts.posts.filter((post:any) => post.uid === auth.user.uid);
     setUserPosts(currUserPosts);
-    if (auth.user.displayName === null) {
-      Firestore.collection('users').where('uid', '==', auth.user.uid).get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-            setUserName(doc.data().userName);
-          });
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-    }
   }, []);
 
   const handleLogout = () => {
@@ -57,7 +43,7 @@ const ProfileScreen = (props:any) => {
           <View style={styles.logout}>
             <Button title="Logout" onPress={handleLogout} color="grey" />
           </View>
-          <Text style={styles.userName}>{userName}</Text>
+          <Text style={styles.userName}>{route.params}</Text>
           <View style={styles.postDetails}>
             <View style={styles.postCount}>
               <Text style={styles.postStats}>24</Text>

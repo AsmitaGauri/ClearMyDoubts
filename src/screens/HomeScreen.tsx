@@ -72,7 +72,7 @@ const HomeScreen = (props:any) => {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.container}>
-          <TouchableOpacity onPress={() => props.navigation.navigate('ProfileScreen')}>
+          <TouchableOpacity onPress={() => props.navigation.push('ProfileScreen', userName)}>
             <View style={styles.avatar}>
               <Avatar
                 rounded
@@ -90,7 +90,7 @@ const HomeScreen = (props:any) => {
               { userName }
             </Text>
             <Text style={styles.subHeaderText}>Get all your doubts cleared!</Text>
-            <View style={styles.button}><Button title="Ask a question" color="grey" onPress={() => props.navigation.navigate('AskQuestion')} /></View>
+            <View style={styles.button}><Button title="Ask a question" color="grey" onPress={() => props.navigation.push('AskQuestion', userName)} /></View>
           </View>
           <View style={styles.footer}>
             <PopularTopics />

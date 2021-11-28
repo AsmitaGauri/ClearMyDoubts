@@ -22,7 +22,6 @@ const PostDetails = (props:any) => {
       Firestore.collection('users').where('uid', '==', auth.user.uid).get()
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
             setUserName(doc.data().userName);
           });
         })
@@ -37,6 +36,7 @@ const PostDetails = (props:any) => {
         // doc.data() is never undefined for query doc snapshots
           Firestore.collection('posts').doc(doc.id).get()
             .then((resp) => {
+              // eslint-disable-next-line
               setComments(resp.data().comments);
             })
             .catch((err) => console.log(err.message));
