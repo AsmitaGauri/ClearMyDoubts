@@ -17,8 +17,6 @@ Let me go get you through all the features that this app contains 😀
    Technologies used:-
    1) React Native
    2) Firebase
-
-   Demo Link:- https://drive.google.com/file/d/1nJGMv0Rxs5M7tPbgc5eiua15K9Tkgv8H/view?usp=sharing <br/>
    
 3) Steps to run the app <br/>
 => npm install <br/>
